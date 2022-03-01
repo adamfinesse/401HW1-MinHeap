@@ -31,10 +31,10 @@ public class cmsc401 {
             heapObject insert = new heapObject(id, priorityKey);
             lastHeapPosition++;
             minHeap[lastHeapPosition] = insert;
-            decreaseKey(id, lastHeapPosition, priorityKey);
+            decreaseKey(lastHeapPosition, priorityKey);
         }
 
-        public static void decreaseKey(int id, int position, int newPriorityKey) {
+        public static void decreaseKey(int position, int newPriorityKey) {
             if (newPriorityKey > minHeap[position].priority) {
                 System.out.println("Error, new priority is higher than current priority");
                 return;
@@ -42,7 +42,7 @@ public class cmsc401 {
 
             minHeap[position].priority = newPriorityKey;
             int tempPos = position;
-            // now work for 1 2 9, 1 1 4, 1 0 1
+            // work for 1 2 9, 1 1 4, 1 0 1
             while (tempPos > 0 && minHeap[(int) Math.floor(tempPos / 2)].priority > minHeap[tempPos].priority) {
                 swap(tempPos, (int) Math.floor(tempPos / 2));
                 tempPos = (int) Math.floor(tempPos / 2);
@@ -55,7 +55,6 @@ public class cmsc401 {
                 minHeap[0] = null;
                 lastHeapPosition--;
                 System.out.println(min.id + " " + min.priority);
-                return min;
             } else {
                 minHeap[0] = minHeap[lastHeapPosition];
                 minHeap[lastHeapPosition] = null;
@@ -63,8 +62,8 @@ public class cmsc401 {
 
                 System.out.println(min.id + " " + min.priority);
                 minHeapify(minHeap, lastHeapPosition, 0);
-                return min;
             }
+            return min;
         }
 
         //    public static void notEnoughArgs(){
@@ -72,14 +71,16 @@ public class cmsc401 {
 //            options();
 //            readNextInput();
 //    }
+    // recursively call and check leaves for the smallest value, upon finding swaps the current with the smallest then recursively
+    //calls
         public static void minHeapify(heapObject[] minHeap, int n, int i) {
             heapObject smallest;
             heapObject left = null;
             heapObject right = null;
             int smallestPosition;
-            if ((2 * i + 2 > n && 2 * i + 1 > n) && i == 0) return;
+            if ((2 * i + 2 > n && 2 * i + 1 > n) && i == 0) return;// if theres only 1 element return
 
-            if (i >= lastHeapPosition / 2 && i != 0) return;// the rest are leaves
+            if (i >= lastHeapPosition / 2 && i != 0) return;// the rest are leaves check this one
 
             if(!(2*i +1 >n )) {
                 left = minHeap[2 * i + 1];
@@ -88,7 +89,11 @@ public class cmsc401 {
                 right = minHeap[2 * i + 2];
             }
             if(left == null) return;
-            if(right == null) return;
+            if(right == null && left != null){
+                if(minHeap[i].priority > left.priority)
+                    swap(i,2*i+1);
+                return;
+            }
                 if (left.id <= n && left.priority < minHeap[i].priority) {
                     smallest = left;
                     smallestPosition = 2 * i + 1;
@@ -109,12 +114,9 @@ public class cmsc401 {
                 }
             }
 
-        public static void buildMinHeap() {
-
-        }
-
+        // parses the next input and chooses an option based on that
         public static void readNextInput() {
-            System.out.println("Enter a command: type options to see commands");
+            //System.out.println("Enter a command: type options to see commands");
             String response = readString();
             String[] parsedResponse = response.split(" ");
 
@@ -142,7 +144,7 @@ public class cmsc401 {
                         break;
                     }
                 }
-                decreaseKey(id, pos, newPrio);
+                decreaseKey(pos, newPrio);
                 minHeapify(minHeap, lastHeapPosition, 0);
                 printHeap();
                 readNextInput();
@@ -159,8 +161,7 @@ public class cmsc401 {
             }
         }
 
-        // takes in positions respective to the minHeap (the index of minHeapPositions is equal to the id of the heap object,
-        // and it holds the position the heapObject is currently at in the minHeap) and swaps the objects in those positions.
+        // takes in positions respective to the minHeap, and swaps the objects in those positions.
         public static void swap(int a, int b) {
             heapObject temp = minHeap[a];
             minHeap[a] = minHeap[b];
@@ -175,6 +176,7 @@ public class cmsc401 {
             return scanner.nextLine();
         }
 
+        // simple function to print the heap for visual purposes
         private static void printHeap() {
             if (lastHeapPosition == -1) return;
             String heap = "";
