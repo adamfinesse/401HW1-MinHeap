@@ -1,3 +1,5 @@
+//Adam Harms
+
 import java.util.Scanner;
 public class cmsc401 {
 
@@ -8,7 +10,7 @@ public class cmsc401 {
     static int lastHeapPosition = -1;
 
         public static void main(String[] args) {
-            System.out.println("Enter the size of the min-heap (1-10000)");
+            //System.out.println("Enter the size of the min-heap (1-10000)");
 
             N = readInt();
 //        if(N >10000) N=10000;
@@ -30,6 +32,8 @@ public class cmsc401 {
         //inserts the object with id and priority key into the minheap. runtime = O(logn)
         public static void insert(int id, int priorityKey) {
             //if(minHeap[N-1] !=null) return;
+            //if(minHeap[minHeapPositions[id]] != null) return; doesnt work completely but its incase the id is already been inserted
+
             heapObject insert = new heapObject(id, priorityKey);
             lastHeapPosition++;
             minHeap[lastHeapPosition] = insert;
@@ -40,10 +44,9 @@ public class cmsc401 {
         // run time = O(logn)
         public static void decreaseKey( int position, int newPriorityKey) {
             if (newPriorityKey > minHeap[position].priority) {
-                System.out.println("Error, new priority is higher than current priority");
+                //System.out.println("Error, new priority is higher than current priority");
                 return;
             }
-
             minHeap[position].priority = newPriorityKey;
             int tempPos = position;
             // work for 1 2 9, 1 1 4, 1 0 1
@@ -72,7 +75,6 @@ public class cmsc401 {
             }
             return min;
         }
-
         //    public static void notEnoughArgs(){
 //            //System.out.println("not enough arguments, check options");
 //            options();
@@ -85,6 +87,7 @@ public class cmsc401 {
             heapObject left = null;
             heapObject right = null;
             int smallestPosition;
+            if(lastHeapPosition == -1) return;
             if ((2 * i + 2 > n && 2 * i + 1 > n) && i == 0) return;// if theres only 1 element return
 
             if (i >= lastHeapPosition / 2 && i != 0) return;// the rest are leaves check this one
@@ -136,7 +139,7 @@ public class cmsc401 {
 //                notEnoughArgs();
 //            }
                 insert(Integer.parseInt(parsedResponse[1]), Integer.parseInt(parsedResponse[2]));
-                printHeap();
+               // printHeap();
                 readNextInput();
             } else if (parsedResponse[0].equalsIgnoreCase("2")) {
 //            if(parsedResponse.length<3){
@@ -146,17 +149,17 @@ public class cmsc401 {
                 int newPrio = Integer.parseInt(parsedResponse[2]);
                 decreaseKey(minHeapPositions[id], newPrio);
                 minHeapify(minHeap, lastHeapPosition, 0);
-                printHeap();
+               // printHeap();
                 readNextInput();
             } else if (parsedResponse[0].equalsIgnoreCase("3")) {
                 extractMin();
-                printHeap();
+               // printHeap();
                 readNextInput();
             } else if (parsedResponse[0].equalsIgnoreCase("4")) {
                 //System.out.println("Goodbye!");
                 System.exit(0);
             } else {
-                printHeap();
+               // printHeap();
                 readNextInput();
             }
         }
